@@ -1,15 +1,47 @@
-@import uk.gov.hmrc.testgovukfrontend1.config.AppConfig
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcLayout
-@import views.html.helper.CSPNonce
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukFooter, GovukLayout}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.{Footer, FooterItem, FooterNavigation}
+import uk.gov.hmrc.hmrcfrontend.views.html.helpers.{HmrcHead, HmrcScripts}
+import uk.gov.hmrc.testgovukfrontend1.config.AppConfig
+import views.html.helper.CSPNonce
 
 @this(
         appConfig: AppConfig,
-        hmrcLayout: HmrcLayout
+        govukLayout: GovukLayout,
+        govukFooter: GovukFooter,
+        hmrcScripts: HmrcScripts,
+        hmrcHead: HmrcHead
 )
 @(pageTitle: Option[String] = None)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
-@hmrcLayout(
-    pageTitle = pageTitle,
-    nonce = CSPNonce.get,
-    isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled
+@myFooter = {
+ @govukFooter(Footer(navigation = Seq(FooterNavigation(
+  items = Seq(FooterItem(
+   text= Some("My footer link"),
+   href = Some("http://www.bbc.co.uk")
+  )),
+  width = None
+ ))))
+}
+
+@govukLayout(
+ pageTitle = pageTitle,
+ footerBlock = Some(myFooter),
+ scriptsBlock = Some(hmrcScripts(nonce = CSPNonce.get)),
+ headBlock = Some(hmrcHead(nonce = CSPNonce.get)),
 )(contentBlock)

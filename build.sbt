@@ -12,6 +12,7 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion                     := "2.12.13",
     libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test,
     pipelineStages in Assets := Seq(gzip),
+    resolvers += Resolver.mavenLocal,
     // ***************
     // Use the silencer plugin to suppress warnings
     scalacOptions += "-P:silencer:pathFilters=routes",
